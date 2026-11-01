@@ -66,6 +66,8 @@ The root-level `.env` (used only by `backend/kcsc_pipeline.py`, `backend/kcsc_in
 
 **PQ / 적격심사**: scores are never produced by AI. `pq_engine.py` computes 사업수행능력평가 점수 from `pq_specs/*.json` (고시 [별표] tables); `award_engine.py` takes those PQ scores and computes the 적격심사 종합평점 per 「지방자치단체 입찰시 낙찰자 결정기준」 제2장의2 [별표 1] (rules and citations in `award_specs/jibang_jeokgyeok_tech.json`; 낙찰자 = lowest price first with 종합평점 ≥ 92/95). `pq_watch.py` (run by the daily `law_crawler.yml`) detects 개정/시행 예정 of every watched 고시·예규 and, for the 낙찰자 결정기준 (PDF-only on 법제처), `award_check.py` diffs the spec's numbers against the new PDF so the issue lists only changed values. Procedure for an amendment: `backend/docs/운영안내.md` §10.
 
+**낙찰가 예측 (`/bid_predictor`)**: past 공사 낙찰 data from 나라장터. With a 기초금액 entered, `bid_model.py` computes the bid price/win probability from "낙찰금액÷기초금액" per past case with the 낙찰하한 floor applied (a bid below the floor loses; above the winner loses), `bid_sampling.py` looks up each past notice's 기초금액 (in-memory cache; counts against the 공공데이터 daily quota), `bid_service.py` assembles the API payload. The old percentile-win backtest was wrong (lower always "won") and is no longer used. Details: `backend/docs/운영안내.md` §11.
+
 **Deployment**: production runs on Cloudtype at `port-0-law-assistant-mpgbhts4cec2050f.sel3.cloudtype.app`; `backend/.github/workflows/keepalive.yml` pings it every 15 minutes to prevent cold-start/sleep.
 
 ## Working agreement: keep the record

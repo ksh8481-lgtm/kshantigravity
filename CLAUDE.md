@@ -36,7 +36,7 @@ A daily GitHub Action (`dependency_canary.yml`) installs the latest dependencies
 ### Required environment variables (`backend/.env`, see `backend/.env_example`)
 
 - `GEMINI_API_KEY` — required; without it, `/api/analyze/start` and other AI endpoints return an explicit "no key configured" error.
-- `GEMINI_MAIN_MODEL` (default `gemini-2.5-pro`), `GEMINI_FAST_MODEL` (`gemini-2.5-flash`), `GEMINI_MAIN_FALLBACKS`, `CITATION_VERIFY_MODE` (`off` default | `pro` | `flash`) — optional Gemini switches, see `gemini_client.py` and `backend/docs/운영안내.md`.
+- `GEMINI_MAIN_MODEL` (default `gemini-3.8-flash`; the 2.5 models are deprecated and auto-routed by Google from 2026-12-01), `GEMINI_FAST_MODEL` (`gemini-3.8-flash`), `GEMINI_LIGHT_MODEL` (`gemini-3.5-flash-lite`, used only for the short keyword/law-name/고시-name extraction calls), `GEMINI_MAIN_FALLBACKS`, `CITATION_VERIFY_MODE` (`off` default | `pro` | `flash`) — optional Gemini switches, see `gemini_client.py` and `backend/docs/운영안내.md`.
 - `VWORLD_API_KEY`, `LAW_API_KEY` — optional; `app.py` falls back to base64-decoded hardcoded defaults (`_V`, `_L` constants near the top of `app.py`) if these are unset, so the app functions without them being set explicitly.
 
 The root-level `.env` (used only by `backend/kcsc_pipeline.py`, `backend/kcsc_ingestion.py`, `backend/init_vectordb.py` when run from repo root) additionally needs `KCSC_API_KEY`.
